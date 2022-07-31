@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>HW5 part 1</title>
+    </head>
+    <body>
+        <h1>HW5 part 1</h1>
+        <a href="/webcomponent.html">HW5 part 2</a>
+        <br>
+        <br>
+        <hr>
+        <br>
+        <form  id="article-form"  >
+            <div>
+                <label for="id">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ID: </label>
+                <input type="text" name="id" id="id">
+            </div>
+            <br>
+            <br>
+            <div>
+                <label for="article_name">Article Name: </label>
+                <input type="text" name="article_name" id="article_name">
+            </div>
+            <br>
+            <br>
+            <div>
+                <label for="article_body">Article Body: </label>
+                <br>
+                <br>
+                <textarea name="article_body" id="article_body" rows="5" cols="33"></textarea>
+            </div>
+            <div>
+                <!-- Made the date field hidden -->
+                <input type="hidden" name="date" id="date">
+            </div>
+            <br>
+            <div>
+                <button type="button" id="postb">postBtn</button>
+                <button type="button" id="getb">getBtn</button>
+                <button type="button" id="putb">putBtn</button>
+                <button type="button" id="deltb">deleteBtn</button>
+            </div>
+        </form>
+        <br>
+        <br>
+        <hr>
+        <section>
+            <h3>Server Response:</h3>
+            <output id="response"></output>
+        </section>
+
+        <script type="module">
+            window.addEventListener("DOMContentLoaded",Bind_btn);
+            function Bind_btn() {
+                document.getElementById("postb").addEventListener("click",post);
+                document.getElementById("getb").addEventListener("click",get);
+                document.getElementById("putb").addEventListener("click",put);
+                document.getElementById("deltb").addEventListener("click",delete_meth);
+            }
+
+            //Post method
+            function post(){
+                let form = document.getElementById("article-form");
+                let endpoint = "https://httpbin.org/post";
+
+                let curr_date = new Date();
+                document.getElementById("date").value = curr_date;
+                /* If HTML form element is provided, it automatically captures its fields.
+                The special thing about FormData is that network methods, such as fetch, can accept a FormData object as a body. It’s encoded and sent out with Content-Type: multipart/form-data.
+                From the server point of view, that looks like a usual form submission.*/
+                let form_data = new FormData(form);
+ 
+                // used to interact with servers. You can retrieve data from a URL without having to do a full page refresh.
+                let xhr = new XMLHttpRequest();
+
+                if(xhr) {
+                    //initialize a request
+                    xhr.open("post", endpoint, true);
+                    //responseText returns the text received from a server following a request being sent.
+                    xhr.onload = () => document.getElementById("response").innerHTML = xhr.responseText;
+                    //sends the request
+                    xhr.send(form_data);
+                }
+            }
+
+            //Put method(PUT is used to send data to a server to create/update a resource.)
+            function put(){
+                let form = document.getElementById("article_form");
+                let endpoint = "https://httpbin.org/put";
+
+                let curr_date = new Date();
+                document.getElementById("date").value = curr_date;
+
+                let form_data = new FormData(form);
+
+                let xhr = new XMLHttpRequest();
+
+                if(xhr) {
+                    xhr.open("put", endpoint, true);
+                    xhr.onload = () => document.getElementById("response").innerHTML = xhr.responseText;
+                    xhr.send(form_data);
+                }
+            }
+
+            //Get method
+            function get(){
+                let form = document.getElementById("article-form");
+                let endpoint = "https://httpbin.org/get";
+
+                let curr_date = new Date();
+                document.getElementById("date").value = curr_date;
+
+                let form_data = new FormData(form);
+
+                let xhr = new XMLHttpRequest();
+
+                if(xhr) {
+                    xhr.open("get", endpoint, true);
+                    xhr.onload = () => document.getElementById("response").innerHTML = xhr.responseText;
+                    xhr.send();
+                }
+            }
+
+            
+
+            //Delete Mthod
+            function delete_meth(){
+                let form = document.getElementById("article_form");
+                let endpoint = "https://httpbin.org/delete";
+                
+                let curr_date = new Date();
+                document.getElementById("date").value = curr_date;
+
+                let form_data = new FormData(form);
+
+                let xhr = new XMLHttpRequest();
+
+                if(xhr) {
+                    xhr.open("delete", endpoint, true);
+                    xhr.onload = () => document.getElementById("response").innerHTML = xhr.responseText;
+                    xhr.send(form_data);
+                }
+            }
+        </script>
+        
+    </body>
+</html>
